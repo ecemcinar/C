@@ -1,0 +1,348 @@
+#include<LiquidCrystal.h>
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include<stdio.h>
+#include<unistd.h>
+#include <stdlib.h>
+
+// initialize the library with the numbers of the interface pins
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+// The additional white space is intentional to make things legible and look nice.
+
+int i1 = 0;
+int i2 = 0;
+
+String myString1 = "";
+int scrollStatus1;
+int scrollDirection1;
+
+
+String myString2 = "";
+int scrollStatus2;
+int scrollDirection2;
+
+int scrollDelay;
+
+
+String message1;
+String message2;
+String toShow1;
+String toShow2;
+
+
+void setup() 
+{
+  
+  Serial.begin(9600);
+  lcd.begin(); //lcd'yi başlatıyoruz
+  lcd.clear();
+  
+  Serial.print("\n\n(R1)Enter input string: ");
+  while(Serial.available()==0){
+  }
+   
+  myString1 = Serial.readString();
+  Serial.println(myString1);
+ 
+  while(true){ // 2
+    Serial.print("\n(R1)Enter 0 for static / 1 to scroll: ");
+    while(Serial.available()==0){  
+    }
+    
+    int myInput = Serial.parseInt();
+    Serial.println(myInput);
+    if(myInput==0 || myInput==1){
+      scrollStatus1=myInput;
+      break;
+    }
+    else{
+       Serial.print("(ERROR) Must be 0 or 1.");
+    }
+  }
+
+ while(true){ // 3
+    if(scrollStatus1 == 0){
+      break;
+    }
+    else{
+      Serial.print("\n(R1)Enter 0 for left / 1 for right: ");
+    
+      while(Serial.available()==0){
+      }
+      int myInput = Serial.parseInt();
+      Serial.println(myInput);
+
+      if(myInput == 0)
+      {
+        scrollDirection1 = 0;
+        //
+        break;
+      }
+      else if(myInput == 1)
+      {
+         scrollDirection1 = 1;
+         break;
+      }
+      else
+      {
+         Serial.print("(ERROR) Must be 0 or 1.");
+      }
+    }
+  }
+  // input for R2
+    Serial.print("\n\n(R2)Enter input string: ");
+    while(Serial.available()==0)
+    { 
+    }
+ 
+    myString2 = Serial.readString();
+    Serial.println(myString2);
+
+    while(true){ // 6
+    Serial.print("\n(R2)Enter 0 for static / 1 to scroll: ");
+    
+    while(Serial.available()==0){
+    }
+    
+    int myInput = Serial.parseInt();
+    Serial.println(myInput);
+    if(myInput == 0)
+    {
+      scrollStatus2 = 0;
+      break;
+    }
+    else if(myInput == 1)
+    {
+       scrollStatus2 = 1;
+       break;
+    }
+    else
+    {
+       Serial.print("(ERROR) Must be 0 or 1.");
+    }
+  }
+
+  while(true){ // 7
+  if(scrollStatus2 == 0)
+    {
+      break;
+    }
+    else
+    {
+      Serial.print("\n(R2)Enter 0 for left / 1 for right: ");
+   
+      while(Serial.available()==0)
+      {
+
+      }
+
+      int myInput = Serial.parseInt();
+      Serial.println(myInput);
+      if(myInput == 0)
+      {
+        scrollDirection2 = 0;
+        break;
+      }
+      else if(myInput == 1)
+      {
+         scrollDirection2 = 1;
+         break;
+      }
+      else
+      {
+         Serial.print("(ERROR) Must be 0 or 1.");
+      }
+    } 
+  }
+
+
+  while(true){ // 8
+    if(scrollStatus2 == 0 && scrollStatus1 == 0)
+    {
+      break;
+    }
+    else
+    {
+      Serial.print("\n\n(R1-R2)Enter scrolling delay: ");
+    
+      while(Serial.available()==0)
+      {
+
+      }
+
+      int myInput = Serial.parseInt();
+      Serial.println(myInput);
+      if(myInput > 0 && myInput < 10001)
+      {
+          scrollDelay = myInput;
+          break;
+      }
+      else
+      {
+          Serial.print("(ERROR) Must be between 1 and 10000.");
+      }
+    } 
+  }
+
+while(true) // status or run
+  {
+    Serial.print("\n\nEnter 0 for status screen, 9 to skip and run: ");
+
+    while(Serial.available()==0)
+    {
+
+    }
+
+    int myInput = Serial.parseInt();
+
+    if(myInput == 0)
+    {
+      Serial.print("\n\nLCD ROW 0 (UP)\n1 - TEXT : ");
+      Serial.print(myString1);
+      Serial.print("\n2 - SCROLLING STATUS : ");
+      if(scrollStatus1 == 0){
+        Serial.print("Disabled");
+      }else{
+        Serial.print("Enabled");
+      }
+      
+      Serial.print("\n3 - SCROLLING DIRECTION : ");
+      if(scrollStatus1 == 0){
+        Serial.print("-");
+      }else if(scrollStatus1 == 1 && scrollDirection1 == 0){
+        Serial.print("Left");
+      }else if(scrollStatus1 == 1 && scrollDirection1 == 1){
+        Serial.print("Right");
+      }
+      
+      Serial.print("\n4 - SCROLLING SPEED (MS): ");
+      Serial.print(scrollDelay);
+      
+      Serial.print("\n\nLCD ROW 1 (DOWN)\n5 - TEXT : ");
+      Serial.print(myString2);
+      Serial.print("\n6 - SCROLLING STATUS : ");
+      if(scrollStatus2 == 0){
+        Serial.print("Disabled");
+      }else{
+        Serial.print("Enabled");
+      }
+      
+      Serial.print("\n7 - SCROLLING DIRECTION : ");
+      if(scrollStatus2 == 0){
+        Serial.print("-");
+      }else if(scrollStatus2 == 1 && scrollDirection2 == 0){
+        Serial.print("Left");
+      }else if(scrollStatus2 == 1 && scrollDirection2 == 1){
+        Serial.print("Right");
+      }
+      
+      Serial.print("\n8 - SCROLLING SPEED (MS): ");
+      Serial.print(scrollDelay);
+      break;
+    }
+    
+    else if(myInput == 9)
+    {
+      break;
+    }
+
+    else
+    {
+      Serial.print("(ERROR) Must be 0 or 9.");
+    }
+  }
+  
+  //-------------------------------
+  
+  //lcd.begin();
+  
+  lcd.setCursor(0,0);
+  message1 = myString1;
+  lcd.print(message1);
+  
+  lcd.setCursor(0,1);
+  message2 = myString2;
+  lcd.print(message2);
+  
+  lcd.home();
+}
+
+void loop() 
+{
+  lcd.home();
+  
+  //------------------------------------ÜST SATIR
+  
+  if(scrollStatus1 == 0) //sabit
+  {
+  lcd.print(message1);
+  }
+  
+  else if(scrollStatus1 == 1) //kaydırılacak
+  {
+    if(scrollDirection1 == 0) //sola
+    {
+      lcd.print(message1.substring(i1,message1.length()) + message1.substring(0,i1));
+
+      i1 = i1 + 1;
+
+
+      if(i1 == message1.length())
+      {
+        i1 = 0;
+      }
+    }
+    
+    else if(scrollDirection1 == 1) //sağa
+    {
+      lcd.print(message1.substring(message1.length()-i1) + message1.substring(0,message1.length()-i1));
+      i1++;
+ 
+      if(i1 == message1.length())
+      {
+        i1 = 0;
+      }
+    }
+  }
+    
+  // ---------------------------------------ALT SATIR
+  
+  lcd.setCursor(0,1);
+  
+  if(scrollStatus2 == 0) //sabit
+  {
+  lcd.print(message2);
+  }
+  
+  else if(scrollStatus2 == 1) //kaydırılacak
+  {
+    if(scrollDirection2 == 0) //sola
+    {
+      lcd.print(message2.substring(i2,message2.length()) + message2.substring(0,i2));
+
+      i2 = i2 + 1;
+
+
+      if(i2 == message2.length())
+      {
+        i2 = 0;
+      }
+    }
+    
+    else if(scrollDirection2 == 1) //sağa
+    {
+      lcd.print(message2.substring(message2.length()-i2) + message2.substring(0,message2.length()-i2));
+      i2++;
+ 
+      if(i2 == message2.length())
+      {
+        i2 = 0;
+      }
+    }
+  }
+  
+  //--------------------------------------------
+
+  delay(scrollDelay);
+}

@@ -1,0 +1,336 @@
+// for 7 segment display
+int a=2;
+int b=3;
+int c=4;
+int d=5;
+int e=6;
+int f=7;
+int g=8;
+int nokta=9;
+
+int kalan=0; // animation
+
+int endTime=11000; // total time that led will be active
+int donmeSn=100; // each animation time
+
+//for led and sensor
+int LEDwhite = 13;
+int DO_Sensor = 11;
+int Sensitivity = 0;
+int PIR_state = LOW;
+
+void setup()
+{
+  pinMode(a, OUTPUT);
+  pinMode(b, OUTPUT);
+  pinMode(c, OUTPUT);
+  pinMode(d, OUTPUT);
+  pinMode(e, OUTPUT);
+  pinMode(f, OUTPUT);
+  pinMode(g, OUTPUT);
+  pinMode(nokta, OUTPUT);
+
+  pinMode(LEDwhite, OUTPUT);
+  pinMode(DO_Sensor, INPUT);
+  Serial.begin(9600);
+  
+}
+
+void loop()
+{
+
+  Sensitivity = digitalRead(DO_Sensor);
+  if (Sensitivity == HIGH) {
+
+    digitalWrite(LEDwhite, HIGH);
+    Serial.println("Light ON");
+
+    
+    kalan=endTime-10000;
+    while(kalan>=donmeSn){
+      animation();
+    } 
+    
+    if(endTime>=10000){
+      dokuz();
+      delay(1000);
+      }
+   if(endTime>=9000){
+    sekiz();
+      delay(1000);
+    }
+
+      if(endTime>=8000){
+        yedi();
+      delay(1000);
+      }
+      if(endTime>=7000){
+        alti();
+      delay(1000);
+      }
+      if(endTime>=6000){
+        bes();
+      delay(1000);
+      }
+      if(endTime>=5000){
+        dort();
+      delay(1000);
+      }
+      if(endTime>=4000){
+        uc();
+      delay(1000);
+      }
+      if(endTime>=3000){
+        iki();
+      delay(1000);
+      }
+      if(endTime>=2000){
+        bir();
+      delay(1000);
+      }
+      if(endTime>=1000){
+        sifir();
+      delay(1000);
+      }
+
+    if (PIR_state == LOW) {
+      PIR_state = HIGH;
+      Serial.println("Motion is detected");
+    }
+  }
+  else{
+    digitalWrite(LEDwhite, LOW);
+
+    if(PIR_state == HIGH){
+      PIR_state = LOW;
+      }
+    }
+  
+
+}
+int animation(){
+  int ecemdelay=0;
+  if(kalan>0){
+    
+  digitalWrite(a, 1);
+  digitalWrite(b, 0);
+  digitalWrite(c, 0);
+  digitalWrite(d, 0);
+  digitalWrite(e, 0);
+  digitalWrite(f, 0);
+  digitalWrite(g, 0);
+  digitalWrite(nokta, 0);
+  if(kalan<donmeSn){
+    ecemdelay=kalan;
+    delay(ecemdelay);
+    kalan=0;
+    }
+  else{
+    delay(donmeSn);
+    kalan-=donmeSn;
+    }
+    }
+  
+  if(kalan>0){
+    digitalWrite(a, 0);
+  digitalWrite(b, 1);
+  digitalWrite(c, 0);
+  digitalWrite(d, 0);
+  digitalWrite(e, 0);
+  digitalWrite(f, 0);
+  digitalWrite(g, 0);
+  digitalWrite(nokta, 0);
+  if(kalan<donmeSn){
+    ecemdelay=kalan;
+    delay(ecemdelay);
+    kalan=0;
+    }
+  else{
+    delay(donmeSn);
+    kalan-=donmeSn;
+    }
+    
+    }
+  
+  if(kalan>0){
+  digitalWrite(a, 0);
+  digitalWrite(b, 0);
+  digitalWrite(c, 1);
+  digitalWrite(d, 0);
+  digitalWrite(e, 0);
+  digitalWrite(f, 0);
+  digitalWrite(g, 0);
+  digitalWrite(nokta, 0);
+  if(kalan<donmeSn){
+    ecemdelay=kalan;
+    delay(ecemdelay);
+    kalan=0;
+    }
+  else{
+    delay(donmeSn);
+    kalan-=donmeSn;
+    }
+  }
+  
+  if(kalan>0){
+  digitalWrite(a, 0);
+  digitalWrite(b, 0);
+  digitalWrite(c, 0);
+  digitalWrite(d, 1);
+  digitalWrite(e, 0);
+  digitalWrite(f, 0);
+  digitalWrite(g, 0);
+  digitalWrite(nokta, 0); 
+  if(kalan<donmeSn){
+    ecemdelay=kalan;
+    delay(ecemdelay);
+    kalan=0;
+    }
+  else{
+    delay(donmeSn);
+    kalan-=donmeSn;
+    }
+  
+  }
+
+  if(kalan>0){
+  digitalWrite(a, 0);
+  digitalWrite(b, 0);
+  digitalWrite(c, 0);
+  digitalWrite(d, 0);
+  digitalWrite(e, 1);
+  digitalWrite(f, 0);
+  digitalWrite(g, 0);
+  digitalWrite(nokta, 0);  
+  if(kalan<donmeSn){
+    ecemdelay=kalan;
+    delay(ecemdelay);
+    kalan=0;
+    }
+  else{
+    delay(donmeSn);
+    kalan-=donmeSn;
+    }
+  }
+
+  if(kalan>0){
+  digitalWrite(a, 0);
+  digitalWrite(b, 0);
+  digitalWrite(c, 0);
+  digitalWrite(d, 0);
+  digitalWrite(e, 0);
+  digitalWrite(f, 1);
+  digitalWrite(g, 0);
+  digitalWrite(nokta, 0);
+  if(kalan<donmeSn){
+    ecemdelay=kalan;
+    delay(ecemdelay);
+    kalan=0;
+    }
+  else{
+    delay(donmeSn);
+    kalan-=donmeSn;
+    }
+  }
+}
+
+int sifir(){
+digitalWrite(a, 1);
+digitalWrite(b, 1);
+digitalWrite(c, 1);
+digitalWrite(d, 1);
+digitalWrite(e, 1);
+digitalWrite(f, 1);
+digitalWrite(g, 0);
+digitalWrite(nokta, 0);
+}
+int bir(){
+digitalWrite(a, 0);
+digitalWrite(b, 1);
+digitalWrite(c, 1);
+digitalWrite(d, 0);
+digitalWrite(e, 0);
+digitalWrite(f, 0);
+digitalWrite(g, 0);
+digitalWrite(nokta, 0);
+}
+int iki(){
+digitalWrite(a, 1);
+digitalWrite(b, 1);
+digitalWrite(c, 0);
+digitalWrite(d, 1);
+digitalWrite(e, 1);
+digitalWrite(f, 0);
+digitalWrite(g, 1);
+digitalWrite(nokta, 0);
+}
+int uc(){
+digitalWrite(a, 1);
+digitalWrite(b, 1);
+digitalWrite(c, 1);
+digitalWrite(d, 1);
+digitalWrite(e, 0);
+digitalWrite(f, 0);
+digitalWrite(g, 1);
+digitalWrite(nokta, 0); 
+}
+int dort(){
+digitalWrite(a, 0);
+digitalWrite(b, 1);
+digitalWrite(c, 1);
+digitalWrite(d, 0);
+digitalWrite(e, 0);
+digitalWrite(f, 1);
+digitalWrite(g, 1);
+digitalWrite(nokta, 0); 
+}
+int bes(){
+digitalWrite(a, 1);
+digitalWrite(b, 0);
+digitalWrite(c, 1);
+digitalWrite(d, 1);
+digitalWrite(e, 0);
+digitalWrite(f, 1);
+digitalWrite(g, 1);
+digitalWrite(nokta, 0);  
+}
+int alti(){
+digitalWrite(a, 1);
+digitalWrite(b, 0);
+digitalWrite(c, 1);
+digitalWrite(d, 1);
+digitalWrite(e, 1);
+digitalWrite(f, 1);
+digitalWrite(g, 1);
+digitalWrite(nokta, 0);
+}
+int yedi(){
+digitalWrite(a, 1);
+digitalWrite(b, 1);
+digitalWrite(c, 1);
+digitalWrite(d, 0);
+digitalWrite(e, 0);
+digitalWrite(f, 0);
+digitalWrite(g, 0);
+digitalWrite(nokta, 0);  
+}
+int sekiz(){
+digitalWrite(a, 1);
+digitalWrite(b, 1);
+digitalWrite(c, 1);
+digitalWrite(d, 1);
+digitalWrite(e, 1);
+digitalWrite(f, 1);
+digitalWrite(g, 1);
+digitalWrite(nokta, 0);
+}
+int dokuz(){
+digitalWrite(a, 1);
+digitalWrite(b, 1);
+digitalWrite(c, 1);
+digitalWrite(d, 1);
+digitalWrite(e, 0);
+digitalWrite(f, 1);
+digitalWrite(g, 1);
+digitalWrite(nokta, 0); 
+}
